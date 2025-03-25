@@ -15,7 +15,7 @@ class DBMLParse extends Command
      *
      * @var string
      */
-    protected $signature = 'dbml:parse {--dbdocs} {--custom}';
+    protected $signature = 'dbml:parse {--dbdocs} {--custom} {--dbml-ext}';
 
     /**
      * The console command description.
@@ -52,7 +52,8 @@ class DBMLParse extends Command
         $database = env('DB_DATABASE');
         $rand = Str::random (8);
         $path = "dbml";
-        $fileName = "{$path}/dbml_{$database}_".$rand.".txt";
+        $fileExtension = $this->option('dbml-ext') ? '.dbml' : '.txt';
+        $fileName = "{$path}/dbml_{$database}_".$rand.$fileExtension;
         Storage::put($fileName,$artisan);
         $getPath = Storage::path($fileName);
         $this->info("Created ! File Path : ".$getPath);
