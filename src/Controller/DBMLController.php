@@ -3,6 +3,7 @@
 namespace Aphisitworachorch\Kacher\Controller;
 
 use Aphisitworachorch\Kacher\Traits\DBMLSyntaxTraits;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Support\Facades\Schema;
@@ -142,7 +143,11 @@ class DBMLController extends Controller
      *
      */
     public function getDatabaseTable($type){
-        $tableName = Schema::getTables();
+        // insures that only the current connected database is being used instead of all databases the user has access to.
+        $schema = DB::connection()->getDatabaseName() ?? null;
+
+        $tableName = Schema::getTables($schema);
+
         $data = [];
         if($tableName){
             if($type === "artisan"){
